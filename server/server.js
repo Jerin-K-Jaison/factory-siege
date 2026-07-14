@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, "data.json");
 
 // ---- Config ----
-const DURATION_MINUTES = 10; // plant meltdown countdown length
+const DURATION_MINUTES = 45; // plant meltdown countdown length
 const TOTAL_LEVELS = 5;
 
 // Correct answers live ONLY on the server. Normalized: uppercase, no spaces.
