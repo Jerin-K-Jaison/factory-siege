@@ -285,11 +285,6 @@ const timerEl = document.getElementById("timer");
 
 function  if (remaining <= 0) {
     timerEl.textContent = "00:00";
-    timerEl.classList.add("critical");
-    if (!meltdownShown) {
-      meltdownShown = true;
-      document.getElementById("meltdown-overlay").classList.add("show");
-    }
     return;
     }
 
