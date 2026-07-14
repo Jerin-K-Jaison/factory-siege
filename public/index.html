@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FACTORY SIEGE // Containment Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div id="alarm-bg"></div>
+<div id="scanlines"></div>
+<div id="win-flash"></div>
+
+<header id="top-bar">
+  <div id="top-bar-left">
+    <span class="dot"></span> PLANT STATUS: <span id="plant-status">COMPROMISED</span>
+  </div>
+  <div id="timer-wrap">
+    MELTDOWN IN <span id="timer">--:--</span>
+  </div>
+  <div id="top-bar-right">
+    <span id="team-badge"></span>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- INTRO / BRIEFING SCREEN -->
+  <section id="screen-intro" class="screen active">
+    <div class="hero-scene" id="hero-intro"></div>
+    <div class="panel briefing-panel">
+      <div class="panel-icon" id="icon-intro"></div>
+      <h1 class="glitch" data-text="FACTORY SIEGE">FACTORY SIEGE</h1>
+      <p class="subtitle">// CONTAINMENT PROTOCOL INITIATED //</p>
+
+      <div class="briefing-text">
+        <p>
+          <strong>0300 HRS.</strong> An unauthorized actor has breached the industrial control
+          systems of <strong>Sector-7 Chemical Plant</strong>. Safety interlocks are disabled.
+          Core process parameters are drifting outside tolerance. Automated shutdown has been
+          <span class="danger">locked out</span>.
+        </p>
+        <p>
+          Engineering has isolated <strong>5 compromised subsystems</strong>. Each must be
+          diagnosed and re-secured before the reactor core reaches critical failure.
+        </p>
+        <p>
+          You are the response team. The plant's fate is in your hands. Work fast — the
+          countdown does not stop for anyone.
+        </p>
+      </div>
+
+      <form id="register-form">
+        <label for="team-name-input">RESPONSE TEAM CALLSIGN</label>
+        <input id="team-name-input" type="text" maxlength="40" placeholder="e.g. NIGHT SHIFT" autocomplete="off" required />
+        <button type="submit" id="begin-btn">BEGIN CONTAINMENT</button>
+      </form>
+      <p id="register-error" class="error-msg"></p>
+    </div>
+  </section>
+
+  <!-- LEVEL SCREENS (rendered dynamically) -->
+  <section id="screen-level" class="screen">
+    <div class="panel level-panel">
+      <div class="panel-icon" id="level-icon"></div>
+      <div class="level-header">
+        <span id="level-tag">SUBSYSTEM 1 / 5</span>
+        <h2 id="level-title">--</h2>
+      </div>
+      <div id="level-body"></div>
+      <div class="submit-row">
+        <input id="answer-input" type="text" placeholder="ENTER CODE" autocomplete="off" />
+        <button id="submit-btn">SUBMIT</button>
+      </div>
+      <p id="submit-feedback" class="feedback-msg"></p>
+    </div>
+  </section>
+
+  <!-- FINAL / WIN SCREEN -->
+  <section id="screen-win" class="screen">
+    <div class="hero-scene" id="hero-win"></div>
+    <div class="panel win-panel">
+      <div class="panel-icon" id="icon-win"></div>
+      <h1 class="glitch-green" data-text="PLANT SECURED">PLANT SECURED</h1>
+      <p class="subtitle">// ALL SUBSYSTEMS RESTORED //</p>
+      <p id="win-summary"></p>
+    </div>
+  </section>
+
+  <!-- FAIL / MELTDOWN OVERLAY -->
+  <div id="meltdown-overlay">
+    <h1 class="glitch-red" data-text="CONTAINMENT FAILED">CONTAINMENT FAILED</h1>
+    <p>The countdown reached zero before the plant could be secured.</p>
+    <p class="small">You may continue working — recovery efforts never truly stop.</p>
+    <button id="meltdown-dismiss">RESUME ANYWAY</button>
+  </div>
+
+</main>
+
+<!-- LEADERBOARD TOGGLE -->
+<button id="leaderboard-toggle">LEADERBOARD</button>
+<aside id="leaderboard-panel">
+  <div class="leaderboard-header">
+    <span>RESPONSE TEAMS</span>
+    <button id="leaderboard-close">✕</button>
+  </div>
+  <table id="leaderboard-table">
+    <thead><tr><th>#</th><th>Team</th><th>Subsystem</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+<script src="icons.js"></script>
+<script src="particles.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
