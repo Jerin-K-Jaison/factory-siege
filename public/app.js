@@ -277,15 +277,20 @@ async function initTimer() {
   }
 }
 
-tickTimer() {
-if (!endTime) return;
-const now = Date.now() + clockOffset;
-const remaining = endTime - now;
-const timerEl = document.getElementById("timer");
+function tickTimer() {
+  if (!endTime) return;
+  const now = Date.now() + clockOffset;
+  const remaining = endTime - now;
+  const timerEl = document.getElementById("timer");
 
-function  if (remaining <= 0) {
-    timerEl.textContent = "00:00";
-    return;
+  function  if (remaining <= 0) {
+      timerEl.textContent = "00:00";
+      timerEl.classList.add("critical");
+      if (!meltdownShown) {
+        meltdownShown = true;
+        document.getElementById("meltdown-overlay").classList.add("show");
+      }
+      return;
     }
 
   const totalSec = Math.floor(remaining / 1000);
