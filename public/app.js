@@ -283,15 +283,15 @@ function tickTimer() {
   const remaining = endTime - now;
   const timerEl = document.getElementById("timer");
 
-  if (remaining <= 0) {
-    timerEl.textContent = "00:00";
-    timerEl.classList.add("critical");
-    if (!meltdownShown) {
-      meltdownShown = true;
-      document.getElementById("meltdown-overlay").classList.add("show");
+  function  if (remaining <= 0) {
+      timerEl.textContent = "00:00";
+      timerEl.classList.add("critical");
+      if (!meltdownShown) {
+        meltdownShown = true;
+        document.getElementById("meltdown-overlay").classList.add("show");
+      }
+      return;
     }
-    return;
-  }
 
   const totalSec = Math.floor(remaining / 1000);
   const mm = String(Math.floor(totalSec / 60)).padStart(2, "0");
