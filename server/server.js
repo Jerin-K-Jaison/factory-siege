@@ -13,7 +13,9 @@ const DATA_FILE = path.join(__dirname, "data.json");
 
 // ---- Config ----
 const DURATION_MINUTES = 60; // plant meltdown countdown length
-const TOTAL_LEVELS = 6;
+const TOTAL_LEVELS = 7;
+const COOLDOWN_LEVELS = new Set([6]); // levels where a wrong answer triggers a cooldown
+const COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes
 
 // Correct answers live ONLY on the server. Normalized: uppercase, no spaces.
 const ANSWERS = {
@@ -22,7 +24,8 @@ const ANSWERS = {
   3: ["TURBULENT"],
   4: ["SODIUMHYDROXIDE", "NAOH"],
   5: ["010001110101001001001111010101010100111001000100"], // binary ASCII for GROUND
-  6: ["TRUTH"], // final shutdown code
+  6: ["RUPTURE"],
+  7: ["TRUTHS"], // final shutdown code
 };
 
 // Clean, human-readable versions shown back to the team (e.g. in the recovered-keys sidebar)
@@ -32,7 +35,8 @@ const DISPLAY_ANSWERS = {
   3: "Turbulent",
   4: "Sodium Hydroxide",
   5: "Ground",
-  6: "Truth",
+  6: "Rupture",
+  7: "Truths",
 };
 
 function normalize(s) {
@@ -84,6 +88,7 @@ app.post("/api/register", (req, res) => {
     level: 1,
     solved: [],
     answers: {},
+    cooldowns: {},
     registeredAt: Date.now(),
     lastSolvedAt: null,
     finishedAt: null,
@@ -109,6 +114,13 @@ app.post("/api/submit", (req, res) => {
   if (lvl !== team.level) {
     return res.status(400).json({ error: "This is not your current active level." });
   }
+  if (!team.cooldowns) team.cooldowns = {};
+
+  // If this level is under an active cooldown from a previous wrong attempt, reject immediately
+  const cooldownUntil = team.cooldowns[lvl];
+  if (cooldownUntil && Date.now() < cooldownUntil) {
+    return res.json({ correct: false, cooldown: true, cooldownUntil });
+  }
 
   const correctList = (ANSWERS[lvl] || []).map(normalize);
   const isCorrect = correctList.includes(normalize(answer));
@@ -116,6 +128,7 @@ app.post("/api/submit", (req, res) => {
   if (isCorrect) {
     team.solved.push({ level: lvl, at: Date.now() });
     team.answers[lvl] = DISPLAY_ANSWERS[lvl] || answer;
+    delete team.cooldowns[lvl];
     team.lastSolvedAt = Date.now();
     team.level = lvl + 1;
     if (lvl === TOTAL_LEVELS) {
@@ -128,6 +141,13 @@ app.post("/api/submit", (req, res) => {
       finished: lvl === TOTAL_LEVELS,
       displayAnswer: team.answers[lvl],
     });
+  }
+
+  if (COOLDOWN_LEVELS.has(lvl)) {
+    const until = Date.now() + COOLDOWN_MS;
+    team.cooldowns[lvl] = until;
+    saveData(db);
+    return res.json({ correct: false, cooldown: true, cooldownUntil: until });
   }
 
   res.json({ correct: false });
