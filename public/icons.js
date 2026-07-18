@@ -96,8 +96,20 @@ const ICONS = {
     <circle cx="130" cy="50" r="5" fill="var(--green)"/>
   </svg>`,
 
-  // Level 6: master key / padlock, glowing
+  // Level 6: insulated sphere with a warning leak/drip
   level6: `
+  <svg viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="55" r="18" fill="var(--amber)" opacity="0.85"/>
+    <circle cx="60" cy="55" r="30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 4"/>
+    <circle cx="60" cy="55" r="30" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 4">
+      <animateTransform attributeName="transform" type="rotate" from="0 60 55" to="360 60 55" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M62 82 C62 82 50 96 50 105 a10 10 0 0 0 20 0 C70 96 62 82 62 82 Z"
+      fill="var(--red)" opacity="0.9"/>
+  </svg>`,
+
+  // Level 7: master key / padlock, glowing
+  level7: `
   <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
     <path d="M32 55 V38 a18 18 0 0 1 36 0 V55" fill="none" stroke="currentColor" stroke-width="4"/>
     <rect x="20" y="55" width="60" height="55" rx="6" fill="none" stroke="currentColor" stroke-width="4"/>

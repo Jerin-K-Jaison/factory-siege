@@ -452,6 +452,13 @@ button {
 
 button:hover { box-shadow: 0 0 14px rgba(255,176,0,0.5); transform: translateY(-1px); }
 button:active { transform: translateY(0); }
+button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+input:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .error-msg { color: var(--red); min-height: 1.2em; margin-top: 8px; font-size: 0.85rem; }
 .feedback-msg { min-height: 1.4em; margin-top: 10px; font-size: 0.9rem; }
@@ -494,6 +501,100 @@ button:active { transform: translateY(0); }
 
 .submit-row { display: flex; gap: 10px; margin-top: 20px; }
 .submit-row input { flex: 1; }
+
+/* ---------- ASHCODE CUTSCENE ---------- */
+#screen-cutscene.active {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  max-width: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 55;
+  background: #000;
+  animation: none;
+}
+
+#cutscene-flicker {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  animation: cutsceneFlicker 2.2s steps(1) infinite;
+  z-index: 1;
+}
+
+@keyframes cutsceneFlicker {
+  0%, 100% { opacity: 0; }
+  4% { opacity: 0.5; }
+  5% { opacity: 0; }
+  38% { opacity: 0; }
+  39% { opacity: 0.35; }
+  40% { opacity: 0; }
+  71% { opacity: 0; }
+  72% { opacity: 0.55; }
+  74% { opacity: 0; }
+}
+
+.cutscene-timer-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  font-family: 'VT323', monospace;
+  font-size: 22vw;
+  color: var(--red);
+  opacity: 0.18;
+  letter-spacing: 4px;
+  pointer-events: none;
+  animation: warnPulse 1.6s ease-in-out infinite;
+}
+
+.cutscene-dialogue-box {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  width: 90%;
+  background: rgba(10, 13, 16, 0.85);
+  border: 1px solid var(--red);
+  border-radius: 6px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255,45,59,0.25);
+}
+
+.cutscene-speaker {
+  color: var(--red);
+  font-weight: bold;
+  letter-spacing: 4px;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  animation: warnPulse 1.2s ease-in-out infinite;
+}
+
+.cutscene-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: #fff;
+  margin-bottom: 26px;
+  min-height: 2.6em;
+}
+
+#cutscene-next-btn {
+  background: var(--red);
+  color: #fff;
+  padding: 12px 28px;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 600px) {
+  .cutscene-dialogue-box { padding: 22px; }
+  .cutscene-text { font-size: 1.05rem; }
+  .cutscene-timer-bg { font-size: 30vw; }
+}
 
 /* ---------- LOGIC GATE CIRCUIT PUZZLE (Level 5) ---------- */
 .circuit-diagram {
@@ -545,6 +646,13 @@ button:active { transform: translateY(0); }
   color: var(--amber);
   background: rgba(255,176,0,0.08);
   font-weight: bold;
+  cursor: pointer;
+}
+
+.gate-palette-empty {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
 .circuit-final { border-top: 1px dashed var(--panel-border); padding-top: 14px; }
@@ -796,6 +904,19 @@ button:active { transform: translateY(0); }
 }
 
 .hidden { display: none !important; }
+
+#cooldown-banner {
+  background: rgba(255,45,59,0.1);
+  border: 1px solid var(--red);
+  color: var(--red);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 12px 0;
+  animation: warnPulse 1.6s ease-in-out infinite;
+}
 
 #bonus-section {
   margin-top: 20px;

@@ -10,6 +10,7 @@
   function resize() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
+    if (rainActive) startRain();
   }
   window.addEventListener("resize", resize);
   resize();
@@ -18,9 +19,12 @@
   let mode = "alert"; // "alert" | "success"
   let particles = [];
   let bursts = [];
+  let rainActive = false;
+  let rainColumns = [];
 
   const ALERT_COLORS = ["#ffb000", "#ff2d3b", "#ffcf66"];
   const SUCCESS_COLORS = ["#38ff9c", "#ffd166", "#35e7e0"];
+  const RAIN_COLOR = "#35e7e0";
 
   function rand(a, b) { return a + Math.random() * (b - a); }
   function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -103,6 +107,46 @@
     }
   }
 
+  class RainColumn {
+    constructor(x) {
+      this.x = x;
+      this.y = rand(-H, 0);
+      this.speed = rand(3, 8);
+      this.digit = Math.random() < 0.5 ? "0" : "1";
+      this.flipTimer = 0;
+    }
+    update() {
+      this.y += this.speed;
+      this.flipTimer += 1;
+      if (this.flipTimer > 8) {
+        this.digit = Math.random() < 0.5 ? "0" : "1";
+        this.flipTimer = 0;
+      }
+      if (this.y > H + 20) {
+        this.y = rand(-200, -20);
+        this.speed = rand(3, 8);
+      }
+    }
+    draw() {
+      ctx.fillStyle = RAIN_COLOR;
+      ctx.globalAlpha = 0.85;
+      ctx.font = "16px 'Share Tech Mono', monospace";
+      ctx.fillText(this.digit, this.x, this.y);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function startRain() {
+    rainActive = true;
+    const colCount = Math.floor(W / 22);
+    rainColumns = Array.from({ length: colCount }, (_, i) => new RainColumn(i * 22 + 4));
+  }
+
+  function stopRain() {
+    rainActive = false;
+    rainColumns = [];
+  }
+
   function spawnAmbientIfNeeded() {
     if (particles.length < MAX_AMBIENT && Math.random() < 0.6) {
       particles.push(new Ember());
@@ -122,11 +166,20 @@
   }
 
   function loop() {
-    ctx.clearRect(0, 0, W, H);
-    spawnAmbientIfNeeded();
-
-    particles = particles.filter((p) => p.update());
-    particles.forEach((p) => p.draw());
+    if (rainActive) {
+      // semi-transparent fill instead of a full clear creates the falling-trail effect
+      ctx.fillStyle = "rgba(5, 7, 10, 0.18)";
+      ctx.fillRect(0, 0, W, H);
+      rainColumns.forEach((c) => {
+        c.update();
+        c.draw();
+      });
+    } else {
+      ctx.clearRect(0, 0, W, H);
+      spawnAmbientIfNeeded();
+      particles = particles.filter((p) => p.update());
+      particles.forEach((p) => p.draw());
+    }
 
     bursts = bursts.filter((p) => p.update());
     bursts.forEach((p) => p.draw());
@@ -135,5 +188,5 @@
   }
   loop();
 
-  window.FactoryParticles = { burst, setMode };
+  window.FactoryParticles = { burst, setMode, startRain, stopRain };
 })();
