@@ -268,7 +268,11 @@ ID   Temperature(°C)   Pressure(bar)   Flow Rate(kg/h)
 50   80                5               120
 </textarea>
         
-        <div id="">look closely..its hidden in plain sight.</div>
+        <div id="">
+        
+        look closely..its hidden in plain sight.</div>
+
+        
       </div>
       <div id="cooldown-banner" class="hidden"></div>
       <p class="hint">
