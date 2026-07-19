@@ -106,7 +106,7 @@ setTimeout(()=>{if(visible)glitchOnce();},5700);
       if (isBusy()) return;
       applyPosition(jitter(base));
       if (Math.random() < 0.5) blinkOnce();
-    }, rand(1300, 2200));
+    }, rand(2000, 3000));
 
     glitchTimer = setInterval(() => {
       if (Math.random() < 0.6) glitchOnce();
