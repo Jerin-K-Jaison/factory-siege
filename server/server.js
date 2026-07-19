@@ -24,8 +24,8 @@ const ANSWERS = {
   3: ["TURBULENT"],
   4: ["SODIUMHYDROXIDE", "NAOH"],
   5: ["010001110101001001001111010101010100111001000100"], // binary ASCII for GROUND
-  6: ["RUPTURE"],
-  7: ["TRUTHS"], // final shutdown code
+  6: ["POTASSIUM", "K"],
+  7: ["VISION"], // final shutdown code
 };
 
 // Clean, human-readable versions shown back to the team (e.g. in the recovered-keys sidebar)
@@ -35,8 +35,8 @@ const DISPLAY_ANSWERS = {
   3: "Turbulent",
   4: "Sodium Hydroxide",
   5: "Ground",
-  6: "Rupture",
-  7: "Truths",
+  6: "Potassium",
+  7: "Vision",
 };
 
 function normalize(s) {
