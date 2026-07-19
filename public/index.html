@@ -14,6 +14,121 @@
 <div id="alarm-bg"></div>
 <div id="scanlines"></div>
 <div id="win-flash"></div>
+<!-- ASHCODE EYES — appears at random, drifts a little, vanishes and reappears elsewhere on click -->
+<div id="ashcode-eyes" aria-hidden="true">
+  <svg viewBox="0 0 160 70" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="eyeClipL">
+        <polygon points="6,35 20,12 55,12 68,35 55,58 20,58"/>
+      </clipPath>
+      <clipPath id="eyeClipR">
+        <polygon points="92,35 105,12 140,12 154,35 140,58 105,58"/>
+      </clipPath>
+    </defs>
+
+    <!-- targeting brackets (HUD viewfinder corners) -->
+    <g class="hud-brackets" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="square">
+      <path d="M2,16 V2 H16"/>
+      <path d="M144,2 H158 V16"/>
+      <path d="M158,54 V68 H144"/>
+      <path d="M16,68 H2 V54"/>
+    </g>
+
+    <!-- left eye -->
+    <g class="eye-group">
+      <polygon class="eye-shape" points="6,35 20,12 55,12 68,35 55,58 20,58"/>
+      <g class="scan-lines" clip-path="url(#eyeClipL)">
+        <rect x="6" y="16" width="62" height="2" class="scan-line"/>
+        <rect x="6" y="26" width="62" height="2" class="scan-line"/>
+        <rect x="6" y="36" width="62" height="2" class="scan-line"/>
+        <rect x="6" y="46" width="62" height="2" class="scan-line"/>
+      </g>
+      <rect class="pupil" x="34" y="19" width="6" height="32" rx="1.5"/>
+      <polygon class="eye-outline" points="6,35 20,12 55,12 68,35 55,58 20,58" fill="none"/>
+    </g>
+
+    <!-- right eye -->
+    <g class="eye-group">
+      <polygon class="eye-shape" points="92,35 105,12 140,12 154,35 140,58 105,58"/>
+      <g class="scan-lines" clip-path="url(#eyeClipR)">
+        <rect x="92" y="16" width="62" height="2" class="scan-line"/>
+        <rect x="92" y="26" width="62" height="2" class="scan-line"/>
+        <rect x="92" y="36" width="62" height="2" class="scan-line"/>
+        <rect x="92" y="46" width="62" height="2" class="scan-line"/>
+      </g>
+      <rect class="pupil" x="120" y="19" width="6" height="32" rx="1.5"/>
+      <polygon class="eye-outline" points="92,35 105,12 140,12 154,35 140,58 105,58" fill="none"/>
+    </g>
+
+    <!-- fierce angled brows -->
+    <line class="brow" x1="3" y1="7" x2="64" y2="26"/>
+    <line class="brow" x1="157" y1="7" x2="96" y2="26"/>
+  </svg>
+</div>
+
+<!-- BACKGROUND SCHEMATIC — spans the entire viewport instead of sitting in the side gutters -->
+<div id="bg-schematic" aria-hidden="true">
+  <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="var(--teal)" stroke-width="2">
+      <path d="M -20 160 H 480 V 320 H 900" />
+      <path d="M 1620 220 H 1180 V 460 H 760 V 620 H 300" />
+      <path d="M -20 740 H 380 V 560 H 700" />
+      <rect x="900" y="270" width="70" height="100" rx="6" />
+      <rect x="700" y="570" width="60" height="90" rx="6" />
+    </g>
+    <g fill="none" stroke="var(--amber)" stroke-width="2">
+      <path d="M 1620 760 H 1080 V 540 H 640" />
+      <circle cx="1080" cy="540" r="16" />
+    </g>
+    <g class="schematic-flow" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="10 14">
+      <path d="M -20 160 H 480 V 320 H 900" />
+      <path d="M 1620 220 H 1180 V 460 H 760 V 620 H 300" />
+    </g>
+    <g class="schematic-flow schematic-flow-amber" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-dasharray="10 14">
+      <path d="M 1620 760 H 1080 V 540 H 640" />
+    </g>
+  </svg>
+</div>
+
+<!-- single slim full-width diagnostic ticker along the very bottom of the viewport -->
+<div id="bg-ticker" aria-hidden="true">
+  <div class="bg-ticker-track">
+    <span>SCADA HANDSHAKE... OK</span>
+    <span class="dim">·</span>
+    <span class="warn">NODE 7-B LATENCY HIGH</span>
+    <span class="dim">·</span>
+    <span>COOLANT PRESSURE NOMINAL</span>
+    <span class="dim">·</span>
+    <span class="err">UNAUTHORIZED PROCESS FLAGGED</span>
+    <span class="dim">·</span>
+    <span>BACKUP RELAY STANDBY</span>
+    <span class="dim">·</span>
+    <span class="warn">CONTAINMENT DRIFT +0.4%</span>
+    <span class="dim">·</span>
+    <span>FUEL ROD ARRAY STABLE</span>
+    <span class="dim">·</span>
+    <span class="err">ASHCODE TRACE LOST</span>
+    <span class="dim">·</span>
+    <span>SCADA HANDSHAKE... OK</span>
+    <span class="dim">·</span>
+    <span class="warn">NODE 7-B LATENCY HIGH</span>
+    <span class="dim">·</span>
+    <span>COOLANT PRESSURE NOMINAL</span>
+    <span class="dim">·</span>
+    <span class="err">UNAUTHORIZED PROCESS FLAGGED</span>
+    <span class="dim">·</span>
+    <span>BACKUP RELAY STANDBY</span>
+    <span class="dim">·</span>
+    <span class="warn">CONTAINMENT DRIFT +0.4%</span>
+    <span class="dim">·</span>
+    <span>FUEL ROD ARRAY STABLE</span>
+    <span class="dim">·</span>
+    <span class="err">ASHCODE TRACE LOST</span>
+    <span class="dim">·</span>
+  </div>
+</div>
+
+
 
 <header id="top-bar">
   <div id="top-bar-left">
@@ -103,6 +218,17 @@
   </section>
 
   <!-- FINAL / WIN SCREEN -->
+  <section id="screen-delete" class="screen">
+    <div class="delete-terminal">
+
+    	<div id="delete-output"></div>
+
+   	<div class="delete-progress">
+     	  <div id="delete-bar"></div>
+   	</div>
+
+    </div>
+  </section>
   <section id="screen-win" class="screen">
     <div class="hero-scene" id="hero-win"></div>
     <div class="panel win-panel">
@@ -140,5 +266,6 @@
 <script src="icons.js"></script>
 <script src="particles.js"></script>
 <script src="app.js"></script>
+<script src="ashcode-eyes.js"></script>
 </body>
 </html>

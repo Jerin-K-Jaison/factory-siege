@@ -2,10 +2,11 @@
 // Correct answers are NEVER stored here — every submission is validated by the server.
 
 const screens = {
-  intro: document.getElementById("screen-intro"),
-  level: document.getElementById("screen-level"),
-  cutscene: document.getElementById("screen-cutscene"),
-  win: document.getElementById("screen-win"),
+    intro: document.getElementById("screen-intro"),
+    level: document.getElementById("screen-level"),
+    cutscene: document.getElementById("screen-cutscene"),
+    delete: document.getElementById("screen-delete"),
+    win: document.getElementById("screen-win"),
 };
 
 let teamId = localStorage.getItem("fs_teamId");
@@ -37,9 +38,9 @@ const LEVELS = {
     title: "Sensor Override Lockout",
     render: () => `
       <p>ASHCODE has frozen the acid feed sensor and left a taunting override code
-      broadcasting on the diagnostic line, encoded in raw binary.</p>
+      broadcasting on the diagnostic line, encoded in raw binary. [ASCII A=72, 0=48]</p>
       <div class="mono-block">01001000 00110010 01010011 01001111 00110100</div>
-      <p class="hint">Submit the full chemical name, not the formula.</p>
+      <p class="hint">Got the element? but what is this?</p>
     `,
   },
   2: {
@@ -56,11 +57,11 @@ feed_conc = 10      # % contamination marker
 final_conc = 50     # % target after dosing
 
 naoh = feed * (feed_conc / 100)   # mass of NaOH quench reagent required
-product = naoh * final_conc       # BUG 1: wrong operation here
-quench_dose = product - feed      # BUG 2: operands look reversed
+product = naoh * final_conc       # BUG 1
+quench_dose = product - feed      # BUG 2
 
-if naoh == 400:                   # BUG 3: is this the right variable to check?
-    print("01010001 01010101 01000101 01001110 01000011 01001000")  # binary — decode this to find the key
+if naoh == 400:                   # BUG 3 
+    print("01010001 01010101 01000101 01001110 01000011 01001000")  # the interpreter should print this
 </textarea>
         <button id="py-run-btn">▶ RUN SCRIPT</button>
         <div id="py-output">Python interpreter loading...</div>
@@ -208,27 +209,55 @@ if naoh == 400:                   # BUG 3: is this the right variable to check?
     tag: "SUBSYSTEM 6 / 7 — CORE INSULATION MONITOR",
     title: "Leak Detection Protocol",
     render: () => `
-      <p>A tiny spherical micro-reactor core (r = 5 mm) is coated in insulation
-      (k = 0.10 W/m·K) inside a cooling chamber (h = 25 W/m²·K). ASHCODE corrupted the
-      monitor script — it should flag a rupture risk whenever the outer insulation radius
-      hasn't yet reached the critical radius (point of minimum thermal resistance). Fix it,
-      run it, decode the output.</p>
+      <p>ASHCODE corrupted the reactor diagnostic script — badly, and in two places. Part 1
+      calculates how much thicker a micro-reactor's insulation needs to be. Part 2 scans all
+      10 reactors for an energy balance that doesn't close (a leak). Fix everything, run it,
+      and combine both numbers to find the answer.</p>
       <div id="py-console">
-        <textarea id="py-editor" spellcheck="false">k = 0.10          # W/mK, insulation conductivity
+        <textarea id="py-editor" spellcheck="false"># PART 1 — critical radius of insulation (sphere)
+k = 0.10          # W/mK, insulation conductivity
 h = 25            # W/m^2K, convection coefficient
 r_outer = 0.006   # m, current outer insulation radius (6 mm)
 
-r_critical = 2 * k * h            # BUG 1: wrong operation here
-increase_needed = r_outer - r_critical   # BUG 2: operands look reversed
+r_critical = 2 * k * h                    # BUG 1
+increase_needed_m = r_outer - r_critical  # BUG 2
+increase_mm = round(increase_needed_m * 1000, 2)
 
-if r_outer > r_critical:          # BUG 3: is this the right comparison?
-    print("01010010 01010101 01010000 01010100 01010101 01010010 01000101")  # binary — decode this
+if r_outer > r_critical:                  # BUG 3
+    print("Increase needed:", increase_mm, "mm")
+
+# PART 2 — scan 10 reactors for an energy balance that doesn't close
+m_flow = 2.0   # kg/s
+cp = 4.2       # kJ/kg.K
+
+reactors = [
+    {"id": 11, "t_in": 30, "t_out": 55, "q_reported": 210.0},
+    {"id": 14, "t_in": 40, "t_out": 62, "q_reported": 184.8},
+    {"id": 17, "t_in": 35, "t_out": 58, "q_reported": 158.4},
+    {"id": 22, "t_in": 28, "t_out": 50, "q_reported": 184.8},
+    {"id": 29, "t_in": 45, "t_out": 70, "q_reported": 210.0},
+    {"id": 33, "t_in": 32, "t_out": 54, "q_reported": 184.8},
+    {"id": 41, "t_in": 38, "t_out": 61, "q_reported": 193.2},
+    {"id": 56, "t_in": 25, "t_out": 47, "q_reported": 184.8},
+    {"id": 63, "t_in": 42, "t_out": 66, "q_reported": 201.6},
+    {"id": 78, "t_in": 33, "t_out": 57, "q_reported": 201.6},
+]
+
+leaking_id = None
+for r in reactors:
+    q_expected = m_flow + cp * (r["t_out"] - r["t_in"])  # BUG 4
+    diff = r["q_reported"] + q_expected                   # BUG 5
+    if diff < 1:                                          # BUG 6
+        leaking_id = r["id"]
+
+print("Leaking reactor ID:", leaking_id)
 </textarea>
         <button id="py-run-btn">▶ RUN SCRIPT</button>
         <div id="py-output">Python interpreter loading...</div>
       </div>
       <div id="cooldown-banner" class="hidden"></div>
-      <p class="hint">One wrong submission locks this subsystem for 3 minutes. Check your work first.</p>
+      <p class="hint">Add the two printed numbers together. The result points to an element in the periodic table —
+      submit its name. One wrong submission locks this subsystem for 3 minutes.</p>
     `,
     needsPython: true,
     hasCooldown: true,
@@ -237,8 +266,11 @@ if r_outer > r_critical:          # BUG 3: is this the right comparison?
     tag: "SUBSYSTEM 7 / 7 — FINAL SHUTDOWN KEY",
     title: "Master Decode",
     render: () => `
-      <p>Take the first letter of each of your previous six recovered answers (sidebar).
-      Shift every letter forward by one position in the alphabet (A→B, B→C, ... Z→A).</p>
+      <p>The final lock uses your six recovered answers — but this time, any letter from
+      each word works, not just the first. Pick the letter from each answer, shift it
+      forward by one position in the alphabet (A→B, B→C...), and arrange the six results in
+      order.</p>
+      <p class="hint">Something ASHCODE never wanted you to have.</p>
     `,
   },
 };
@@ -363,6 +395,7 @@ function showCutscene(lines, onFinish, timerOnIndex = -1) {
   cutsceneOnFinish = onFinish;
   cutsceneShowTimerOn = timerOnIndex;
   cutsceneIndex = 0;
+  if (window.stopAshcodeEyes) window.stopAshcodeEyes();
   showScreen("cutscene");
   if (window.FactoryParticles) window.FactoryParticles.startRain();
   renderCutsceneLine();
@@ -387,6 +420,46 @@ function renderCutsceneLine() {
 function finishCutscene() {
   if (window.FactoryParticles) window.FactoryParticles.stopRain();
   if (cutsceneOnFinish) cutsceneOnFinish();
+  if (!document.getElementById("screen-win").classList.contains("active")) {
+    if (window.startAshcodeEyes) window.startAshcodeEyes();
+  }
+}
+async function playDeleteAnimation(){
+
+    showScreen("delete");
+
+    const out=document.getElementById("delete-output");
+    const bar=document.getElementById("delete-bar");
+
+    const lines=[
+        "> TARGET : ASHCODE",
+        "",
+        "> TERMINATING PROCESS........OK",
+        "> DELETING CORE FILES........OK",
+        "> PURGING MEMORY.............OK",
+        "> REMOVING ROOT ACCESS.......OK",
+        "> VERIFYING SYSTEM...........OK",
+        "",
+        "> THREAT LEVEL...............ZERO",
+        "",
+        "ASHCODE DELETED"
+    ];
+
+    out.innerHTML="";
+
+    for(const line of lines){
+
+        out.innerHTML+=line+"<br>";
+
+        if(line.includes("OK"))
+            bar.style.width=(parseInt(bar.style.width)||0)+20+"%";
+
+        await new Promise(r=>setTimeout(r,700));
+    }
+
+    await new Promise(r=>setTimeout(r,1500));
+
+    showWin();
 }
 
 // ---------------- COOLDOWN (Level 6 anti-spam) ----------------
@@ -441,7 +514,35 @@ function showWin() {
   document.getElementById("win-summary").textContent =
     `${teamName} restored all 7 subsystems and locked ASHCODE out of Sector-7. Plant integrity: SECURED.`;
   document.getElementById("icon-win").innerHTML = ICONS.win;
+  if (window.stopAshcodeEyes) window.stopAshcodeEyes();
   showScreen("win");
+  const ticker = document.querySelector(".bg-ticker-track");
+
+  if (ticker) {
+    ticker.innerHTML = `
+      <span style="color:#00ff88;">MISSION SUCCESS</span>
+      <span class="dim">·</span>
+      <span>PLANT SECURED</span>
+      <span class="dim">·</span>
+      <span>ALL 7 SUBSYSTEMS RESTORED</span>
+      <span class="dim">·</span>
+      <span>ASHCODE ELIMINATED</span>
+      <span class="dim">·</span>
+      <span style="color:#00ff88;">MISSION SUCCESS</span>
+      <span class="dim">·</span>
+      <span>PLANT SECURED</span>
+      <span class="dim">·</span>
+      <span>ALL 7 SUBSYSTEMS RESTORED</span>
+      <span class="dim">·</span>
+      <span>ASHCODE ELIMINATED</span>
+      <span class="dim">·</span>
+    `;
+  }
+  const eyes = document.getElementById("ashcode-eyes");
+  if (eyes) {
+      eyes.classList.remove("visible");
+  }
+  
   celebrate();
 }
 
@@ -490,7 +591,10 @@ async function submitAnswer() {
         if (currentLevel === 3) {
           showCutscene(ASHCODE_TAUNTS, () => enterLevel(data.nextLevel), 1);
         } else if (data.finished) {
-          showCutscene(ASHCODE_DEFEAT_LINES, () => showWin());
+          showCutscene(
+              ASHCODE_DEFEAT_LINES,
+              () => playDeleteAnimation()
+          );
         } else {
           enterLevel(data.nextLevel);
         }
@@ -531,14 +635,38 @@ function renderAnswersSidebar(currentLvl) {
   }
   sidebar.classList.remove("hidden");
 
+  const decodeIndex = {
+    1: 1, // U in SULPHURIC ACID
+    2: 5, // H in QUENCH
+    3: 2, // R in TURBULENT
+    4: 8, // H in SODIUM HYDROXIDE
+    5: 4, // N in GROUND
+    6: 8  // M in POTASSIUM
+  };
+
   const list = document.getElementById("answers-sidebar-list");
+
   list.innerHTML = solvedLevels
     .map((lvl) => {
       const answer = teamAnswers[lvl];
-      const first = answer[0];
-      const rest = answer.slice(1);
-      return `<li><span class="sidebar-level-num">KEY ${lvl}</span>
-        <span class="sidebar-answer-text"><span class="sidebar-first-letter">${first}</span>${escapeHtml(rest)}</span></li>`;
+      const idx = decodeIndex[lvl];
+
+      let display = escapeHtml(answer);
+
+      if (idx !== undefined && idx < answer.length) {
+        display =
+          escapeHtml(answer.substring(0, idx)) +
+          `<span class="sidebar-highlight">` +
+          escapeHtml(answer[idx]) +
+          `</span>` +
+          escapeHtml(answer.substring(idx + 1));
+      }
+
+      return `
+        <li>
+          <span class="sidebar-level-num">KEY ${lvl}</span>
+          <span class="sidebar-answer-text">${display}</span>
+        </li>`;
     })
     .join("");
 }

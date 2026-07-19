@@ -192,6 +192,12 @@ body {
   line-height: 1.4;
   margin-bottom: 12px;
 }
+.sidebar-highlight{
+    color:#42ff8c;
+    font-weight:700;
+    text-decoration:underline;
+    text-shadow:0 0 8px #42ff8c;
+}
 #answers-sidebar-list {
   list-style: none;
   margin: 0;
@@ -1057,4 +1063,192 @@ input:disabled { opacity: 0.4; cursor: not-allowed; }
   .panel { padding: 20px; }
   .panel-icon { width: 64px; height: 64px; }
   .win-panel .panel-icon { width: 90px; height: 90px; }
+}
+
+
+/* Added effects */
+#ashcode-eyes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 70;
+  width: 110px;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  transform: translate(-50%, -50%) scale(0.85);
+  transition: top 1.6s ease, left 1.6s ease, opacity 0.6s ease, transform 0.4s ease;
+}
+#ashcode-eyes.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+#ashcode-eyes.glitch-out {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.35) skewX(14deg);
+}
+#ashcode-eyes svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 8px var(--red)) drop-shadow(0 0 20px rgba(255,45,59,0.6));
+  animation: eyesGlowPulse 2.4s ease-in-out infinite;
+}
+@keyframes eyesGlowPulse {
+  0%, 100% { filter: drop-shadow(0 0 8px var(--red)) drop-shadow(0 0 20px rgba(255,45,59,0.6)); }
+  50% { filter: drop-shadow(0 0 5px var(--red)) drop-shadow(0 0 12px rgba(255,45,59,0.4)); }
+}
+
+/* occasional digital-corruption flicker, triggered briefly by JS */
+#ashcode-eyes.rgb-glitch svg {
+  animation: none;
+  filter: drop-shadow(2px 0 0 var(--red)) drop-shadow(-2px 0 0 var(--teal)) drop-shadow(0 0 16px var(--red));
+}
+#ashcode-eyes.rgb-glitch .eye-group { transform: translateX(1.5px); }
+
+.hud-brackets { opacity: 0.85; }
+
+.eye-shape {
+  fill: var(--red);
+}
+.eye-outline {
+  stroke: #7a0008;
+  stroke-width: 1.5;
+}
+.scan-lines { opacity: 0.55; }
+.scan-line {
+  fill: #05070a;
+  animation: eyeScan 2.6s ease-in-out infinite;
+}
+.eye-group:nth-of-type(3) .scan-line { animation-delay: 0.15s; }
+@keyframes eyeScan {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.pupil {
+  fill: #05070a;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: eyesDart 4.6s ease-in-out infinite;
+}
+@keyframes eyesDart {
+  0%, 100% { transform: translateX(0) scaleY(1); }
+  20% { transform: translateX(-2px) scaleY(1); }
+  40% { transform: translateX(2px) scaleY(1); }
+  60% { transform: translateX(0) scaleY(1); }
+}
+#ashcode-eyes.blinking .eye-shape,
+#ashcode-eyes.blinking .eye-outline,
+#ashcode-eyes.blinking .pupil,
+#ashcode-eyes.blinking .scan-lines {
+  transform: scaleY(0.05);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.brow {
+  stroke: #120306;
+  stroke-width: 8;
+  stroke-linecap: square;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.6));
+}
+
+@media (max-width: 480px) {
+  #ashcode-eyes { width: 80px; }
+}
+
+
+#bg-schematic {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.5;
+  pointer-events: none;
+}
+#bg-schematic svg { width: 100%; height: 100%; }
+#bg-schematic g:not(.schematic-flow) { opacity: 0.22; }
+.schematic-flow {
+  opacity: 0.55;
+  animation: schematicFlow 3s linear infinite;
+}
+.schematic-flow-amber { animation-duration: 2.2s; animation-direction: reverse; }
+@keyframes schematicFlow {
+  to { stroke-dashoffset: -48; }
+}
+
+/* -- single slim full-width diagnostic ticker along the very bottom of the viewport -- */
+#bg-ticker {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  height: 24px;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(5,7,10,0.55), transparent);
+  border-top: 1px solid rgba(42,53,64,0.5);
+}
+.bg-ticker-track {
+  display: inline-flex;
+  gap: 10px;
+  white-space: nowrap;
+  padding-left: 100%;
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  color: var(--teal);
+  opacity: 0.75;
+  animation: bgTickerScroll 42s linear infinite;
+}
+.bg-ticker-track .warn { color: var(--amber); }
+.bg-ticker-track .err { color: var(--red); }
+.bg-ticker-track .dim { color: var(--text-dim); opacity: 0.5; }
+@keyframes bgTickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@media (max-width: 600px) {
+  #bg-ticker { display: none; }
+}
+
+
+#bg-ticker {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  height: 24px;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(5,7,10,0.55), transparent);
+  border-top: 1px solid rgba(42,53,64,0.5);
+}
+.bg-ticker-track {
+  display: inline-flex;
+  gap: 10px;
+  white-space: nowrap;
+  padding-left: 100%;
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  color: var(--teal);
+  opacity: 0.75;
+  animation: bgTickerScroll 42s linear infinite;
+}
+.bg-ticker-track .warn { color: var(--amber); }
+.bg-ticker-track .err { color: var(--red); }
+.bg-ticker-track .dim { color: var(--text-dim); opacity: 0.5; }
+@keyframes bgTickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@media (max-width: 600px) {
+  #bg-ticker { display: none; }
 }
