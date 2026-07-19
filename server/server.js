@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, "data.json");
 
 // ---- Config ----
-const DURATION_MINUTES = 60; // plant meltdown countdown length
+const DURATION_MINUTES = 120; // plant meltdown countdown length
 const TOTAL_LEVELS = 7;
 const COOLDOWN_LEVELS = new Set([6]); // levels where a wrong answer triggers a cooldown
 const COOLDOWN_MS = 3 * 60 * 1000; // 3 minutes
