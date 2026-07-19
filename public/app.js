@@ -40,7 +40,7 @@ const LEVELS = {
       <p>ASHCODE has frozen the acid feed sensor and left a taunting override code
       broadcasting on the diagnostic line, encoded in raw binary. [ASCII A=65, 0=48]</p>
       <div class="mono-block">01001000 00110010 01010011 01001111 00110100</div>
-      <p class="hint">Got the element? but what is this?</p>
+      <p class="hint">Got the compound? but what is this?</p>
     `,
   },
   2: {
