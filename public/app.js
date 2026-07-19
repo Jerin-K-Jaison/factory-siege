@@ -273,7 +273,7 @@ ID   Temperature(°C)   Pressure(bar)   Flow Rate(kg/h)
       <p class="pss..look here">Divide the ID by 3. Then add by 3. The result points to an element in the periodic table —
       submit its name. One wrong submission locks this subsystem for 3 minutes.</p>
     `,
-    needsPython: true,
+    needsPython: false,
     hasCooldown: true,
   },
   7: {
