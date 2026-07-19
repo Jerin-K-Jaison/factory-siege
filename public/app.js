@@ -273,7 +273,8 @@ ID   Temperature(°C)   Pressure(bar)   Flow Rate(kg/h)
       <div id="cooldown-banner" class="hidden"></div>
       <p class="hint">
       Divide the ID by 3. Then add by 3. 
-      The result points to an element in the periodic table — submit its name. </p>
+      The result points to an element in the periodic table — submit its name. But be careful.
+      wrong answer will trigger the safety mechanism! </p>
     `,
     needsPython: false,
     hasCooldown: true,
