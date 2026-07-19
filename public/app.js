@@ -215,48 +215,69 @@ if naoh == 400:                   # BUG 3
       and combine both numbers to find the answer.</p>
       <div id="py-console">
         <textarea id="py-editor" spellcheck="false"># PART 1 — critical radius of insulation (sphere)
-k = 0.10          # W/mK, insulation conductivity
-h = 25            # W/m^2K, convection coefficient
-r_outer = 0.006   # m, current outer insulation radius (6 mm)
+# PART 1 — recycle flow rate calculation
 
-r_critical = 2 * k * h                    # BUG 1
-increase_needed_m = r_outer - r_critical  # BUG 2
-increase_mm = round(increase_needed_m * 1000, 2)
+fresh_feed = 600          # kg/h
+fresh_conc = 30           # wt%
+recycle_conc = 15         # wt%
+mixed_conc = 20           # wt%
 
-if r_outer > r_critical:                  # BUG 3
-    print("Increase needed:", increase_mm, "mm")
+solute_fresh = fresh_feed * (fresh_conc / 100)
 
-# PART 2 — scan 10 reactors for an energy balance that doesn't close
-m_flow = 2.0   # kg/s
-cp = 4.2       # kJ/kg.K
+# BUG 1
+recycle_flow = (solute_fresh - mixed_conc * fresh_feed / 100) / (recycle_conc - mixed_conc)
 
-reactors = [
-    {"id": 11, "t_in": 30, "t_out": 55, "q_reported": 210.0},
-    {"id": 14, "t_in": 40, "t_out": 62, "q_reported": 184.8},
-    {"id": 17, "t_in": 35, "t_out": 58, "q_reported": 158.4},
-    {"id": 22, "t_in": 28, "t_out": 50, "q_reported": 184.8},
-    {"id": 29, "t_in": 45, "t_out": 70, "q_reported": 210.0},
-    {"id": 33, "t_in": 32, "t_out": 54, "q_reported": 184.8},
-    {"id": 41, "t_in": 38, "t_out": 61, "q_reported": 193.2},
-    {"id": 56, "t_in": 25, "t_out": 47, "q_reported": 184.8},
-    {"id": 63, "t_in": 42, "t_out": 66, "q_reported": 201.6},
-    {"id": 78, "t_in": 33, "t_out": 57, "q_reported": 201.6},
+# BUG 2
+mixed_flow = fresh_feed - recycle_flow
+
+print("Recycle flow rate =", round(recycle_flow, 2), "kg/h")
+
+
+# PART 2 — scan 10 mixers for a solute balance that doesn't close
+
+mixers = [
+    {"id": 1,  "fresh": 600, "fresh_conc": 30, "recycle": 1200, "recycle_conc": 15, "mixed_conc": 20},
+    {"id": 2,  "fresh": 500, "fresh_conc": 25, "recycle": 500,  "recycle_conc": 10, "mixed_conc": 17.5},
+    {"id": 3,  "fresh": 700, "fresh_conc": 28, "recycle": 900,  "recycle_conc": 12, "mixed_conc": 19},
+    {"id": 4,  "fresh": 650, "fresh_conc": 32, "recycle": 800,  "recycle_conc": 18, "mixed_conc": 24},
+    {"id": 5,  "fresh": 550, "fresh_conc": 35, "recycle": 1000, "recycle_conc": 20, "mixed_conc": 25},
+    {"id": 6,  "fresh": 620, "fresh_conc": 30, "recycle": 900,  "recycle_conc": 15, "mixed_conc": 21},
+
+    # Intended leaking mixer
+    {"id": 7,  "fresh": 480, "fresh_conc": 27, "recycle": 700,  "recycle_conc": 12, "mixed_conc": 25},
+
+    {"id": 8,  "fresh": 750, "fresh_conc": 29, "recycle": 1100, "recycle_conc": 14, "mixed_conc": 20},
+    {"id": 9,  "fresh": 580, "fresh_conc": 31, "recycle": 850,  "recycle_conc": 16, "mixed_conc": 22},
+    {"id": 10, "fresh": 600, "fresh_conc": 30, "recycle": 1200, "recycle_conc": 15, "mixed_conc": 20},
 ]
 
 leaking_id = None
-for r in reactors:
-    q_expected = m_flow + cp * (r["t_out"] - r["t_in"])  # BUG 4
-    diff = r["q_reported"] + q_expected                   # BUG 5
-    if diff < 1:                                          # BUG 6
-        leaking_id = r["id"]
 
-print("Leaking reactor ID:", leaking_id)
+for m in mixers:
+
+    solute_in = (
+        m["fresh"] * m["fresh_conc"] / 100
+        + m["recycle"] * m["recycle_conc"] / 100
+    )
+
+    mixed_flow = m["fresh"] + m["recycle"]
+
+    solute_out = mixed_flow * m["mixed_conc"] / 100
+
+    # BUG 3
+    diff = solute_out + solute_in
+
+    # BUG 4
+    if diff < 1:
+        leaking_id = m["id"]
+
+print("Leaking mixer ID:", leaking_id)
 </textarea>
         <button id="py-run-btn">▶ RUN SCRIPT</button>
         <div id="py-output">Python interpreter loading...</div>
       </div>
       <div id="cooldown-banner" class="hidden"></div>
-      <p class="hint">Add the two printed numbers together. The result points to an element in the periodic table —
+      <p class="hint">Divide first answer by 100.Add the second number. The result points to an element in the periodic table —
       submit its name. One wrong submission locks this subsystem for 3 minutes.</p>
     `,
     needsPython: true,
