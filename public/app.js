@@ -209,12 +209,11 @@ if naoh == 400:                   # BUG 3
     tag: "SUBSYSTEM 6 / 7 — CORE INSULATION MONITOR",
     title: "Leak Detection Protocol",
     render: () => `
-      <p>ASHCODE corrupted the reactor diagnostic script — badly, and in two places. Part 1
-      calculates how much thicker a micro-reactor's insulation needs to be. Part 2 scans all
-      10 reactors for an energy balance that doesn't close (a leak). Fix everything, run it,
-      and combine both numbers to find the answer.</p>
+      <p>ASHCODE corrupted the reactor diagnostics. He started controlling the reactors on by one. The plant has 50 reactors. Under normal operation, 
+      every reactor should have a temperature of 80°C, a pressure of 5 bar, and a flow rate of 120 kg/h. One reactor is malfunctioning and is in the control of ASHCODE.
+      Identify its Reactor ID</p>
       <div id="py-console">
-        <textarea id="py-editor" spellcheck="false"># PART 1 — critical radius of insulation (sphere)
+        <textarea id="py-editor" spellcheck="false">
 ID   Temperature(°C)   Pressure(bar)   Flow Rate(kg/h)
 1    80                5               120
 2    80                5               120
@@ -268,7 +267,7 @@ ID   Temperature(°C)   Pressure(bar)   Flow Rate(kg/h)
 50   80                5               120
 </textarea>
         
-        <div id="py-output">look closely..its hidden in plain sight.</div>
+        <div id="">look closely..its hidden in plain sight.</div>
       </div>
       <div id="cooldown-banner" class="hidden"></div>
       <p class="pss..look here">Divide the ID by 3. Then add by 3. The result points to an element in the periodic table —
