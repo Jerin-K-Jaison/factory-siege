@@ -215,69 +215,63 @@ if naoh == 400:                   # BUG 3
       and combine both numbers to find the answer.</p>
       <div id="py-console">
         <textarea id="py-editor" spellcheck="false"># PART 1 — critical radius of insulation (sphere)
-# PART 1 — recycle flow rate calculation
-
-fresh_feed = 600          # kg/h
-fresh_conc = 30           # wt%
-recycle_conc = 15         # wt%
-mixed_conc = 20           # wt%
-
-solute_fresh = fresh_feed * (fresh_conc / 100)
-
-# BUG 1
-recycle_flow = (solute_fresh - mixed_conc * fresh_feed / 100) / (recycle_conc - mixed_conc)
-
-# BUG 2
-mixed_flow = fresh_feed - recycle_flow
-
-print("Recycle flow rate =", round(recycle_flow, 2), "kg/h")
-
-
-# PART 2 — scan 10 mixers for a solute balance that doesn't close
-
-mixers = [
-    {"id": 1,  "fresh": 600, "fresh_conc": 30, "recycle": 1200, "recycle_conc": 15, "mixed_conc": 20},
-    {"id": 2,  "fresh": 500, "fresh_conc": 25, "recycle": 500,  "recycle_conc": 10, "mixed_conc": 17.5},
-    {"id": 3,  "fresh": 700, "fresh_conc": 28, "recycle": 900,  "recycle_conc": 12, "mixed_conc": 19},
-    {"id": 4,  "fresh": 650, "fresh_conc": 32, "recycle": 800,  "recycle_conc": 18, "mixed_conc": 24},
-    {"id": 5,  "fresh": 550, "fresh_conc": 35, "recycle": 1000, "recycle_conc": 20, "mixed_conc": 25},
-    {"id": 6,  "fresh": 620, "fresh_conc": 30, "recycle": 900,  "recycle_conc": 15, "mixed_conc": 21},
-
-    # Intended leaking mixer
-    {"id": 7,  "fresh": 480, "fresh_conc": 27, "recycle": 700,  "recycle_conc": 12, "mixed_conc": 25},
-
-    {"id": 8,  "fresh": 750, "fresh_conc": 29, "recycle": 1100, "recycle_conc": 14, "mixed_conc": 20},
-    {"id": 9,  "fresh": 580, "fresh_conc": 31, "recycle": 850,  "recycle_conc": 16, "mixed_conc": 22},
-    {"id": 10, "fresh": 600, "fresh_conc": 30, "recycle": 1200, "recycle_conc": 15, "mixed_conc": 20},
-]
-
-leaking_id = None
-
-for m in mixers:
-
-    solute_in = (
-        m["fresh"] * m["fresh_conc"] / 100
-        + m["recycle"] * m["recycle_conc"] / 100
-    )
-
-    mixed_flow = m["fresh"] + m["recycle"]
-
-    solute_out = mixed_flow * m["mixed_conc"] / 100
-
-    # BUG 3
-    diff = solute_out + solute_in
-
-    # BUG 4
-    if diff < 1:
-        leaking_id = m["id"]
-
-print("Leaking mixer ID:", leaking_id)
+ID   Temperature(°C)   Pressure(bar)   Flow Rate(kg/h)
+1    80                5               120
+2    80                5               120
+3    80                5               120
+4    80                5               120
+5    80                5               120
+6    80                5               120
+7    80                5               120
+8    80                5               120
+9    80                5               120
+10   80                5               120
+11   80                5               120
+12   80                5               120
+13   80                5               120
+14   80                5               120
+15   80                5               120
+16   80                5               120
+17   80                5               120
+18   80                5               120
+19   80                5               120
+20   80                5               120
+21   80                5               120
+22   80                5               120
+23   80                5               120
+24   80                5               120
+25   80                5               120
+26   80                5               120
+27   80                5               120
+28   80                5               120
+29   80                5               120
+30   80                5               120
+31   80                5               120
+32   80                5               120
+33   80                5               120
+34   80                5               120
+35   80                5               120
+36   80                5               120
+37   80                5               120
+38   80                5               120
+39   80                5               120
+40   80                5               120
+41   80                5               120
+42   80                5               120
+43   80                5               120
+44   80                5               120
+45   80                5               120
+46   80                5               120
+47   80                5               120
+48   80                5               102
+49   80                5               120
+50   80                5               120
 </textarea>
-        <button id="py-run-btn">▶ RUN SCRIPT</button>
-        <div id="py-output">Python interpreter loading...</div>
+        
+        <div id="py-output">look closely..its hidden in plain sight.</div>
       </div>
       <div id="cooldown-banner" class="hidden"></div>
-      <p class="hint">Divide first answer by 100.Add the second number. The result points to an element in the periodic table —
+      <p class="pss..look here">Divide the ID by 3. Then add by 3. The result points to an element in the periodic table —
       submit its name. One wrong submission locks this subsystem for 3 minutes.</p>
     `,
     needsPython: true,
